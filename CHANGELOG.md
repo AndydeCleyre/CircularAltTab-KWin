@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+
+### New feature
+- Added `centerOnScreen` option (default: `false`) — when enabled, the pie switcher centers on the active screen instead of following the cursor. Set `centerOnScreen: true` in `contents/ui/Pie.qml` or override on the `Pie` instance in `main.qml`.
+
 ## 1.0
 
 Initial release. Forked from [PieTabSwitcher-KWin](https://github.com/Riflio/PieTabSwitcher-KWin), substantially rewritten:
