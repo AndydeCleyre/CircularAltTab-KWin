@@ -16,6 +16,7 @@ Rectangle {
   property double minimizedOpacity: 0.7
   property double bgAlpha: 0.72
   property double captionFontScale: 1.5
+  property bool centerOnScreen: true
 
   // max slices per ring before spilling to the next ring (≈ 360/maxPerRing° min arc)
   readonly property int maxPerRing: 8

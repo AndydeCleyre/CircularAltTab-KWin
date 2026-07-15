@@ -80,7 +80,7 @@ Not tested on other Plasma 6.x point releases - reports welcome.
 
 ## Features
 
-- Pie-slice window layout centered on cursor
+- Pie-slice window layout centered on cursor (configurable to center on screen)
 - Live window thumbnails (icons for minimized windows)
 - Mouse hover, click, scroll wheel, and keyboard navigation
 - Multi-ring layout when you have more than 8 windows
@@ -110,12 +110,14 @@ Edit `contents/ui/Pie.qml` to change visual defaults:
 | `minimizedOpacity` | 0.7 | Opacity of minimized windows |
 | `bgAlpha` | 0.72 | Background disc transparency |
 | `captionFontScale` | 1.5 | Caption font size multiplier |
+| `centerOnScreen` | false | Center the pie on screen instead of on cursor |
 
 Or override in `main.qml` on the `Pie` instance:
 ```qml
 Pie {
     selectedScale: 1.1
     bgAlpha: 0.9
+    centerOnScreen: true
 }
 ```
 

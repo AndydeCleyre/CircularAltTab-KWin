@@ -135,18 +135,25 @@ KWin.TabBoxSwitcher {
       pie.screenFit =1.0;
       pie.updateData();
       let g =tabBox.screenGeometry;
+      const validScreen =g && g.width>0 && g.height>0;
       // shrink further if the natural size (many windows -> many rings) would
       // overflow the screen - sizeFactor alone floors at 0.55 and doesn't know
       // about screen size
-      if ( g && g.width>0 && g.height>0 ) {
+      if ( validScreen ) {
         const margin =0.95;
         const fit =Math.min(1.0, g.width*margin/pie.implicitWidth, g.height*margin/pie.implicitHeight);
         if ( fit<1.0 ) { pie.screenFit =fit; }
       }
-      // center on cursor, then clamp to the screen so the pie never opens off-screen
-      let cx =KWin.Workspace.cursorPos.x-pie.implicitWidth/2;
-      let cy =KWin.Workspace.cursorPos.y-pie.implicitHeight/2;
-      if ( g && g.width>0 && g.height>0 ) {
+      // center on screen or cursor, then clamp to the screen so the pie never opens off-screen
+      let cx, cy;
+      if ( pie.centerOnScreen && validScreen ) {
+        cx =g.x+g.width/2-pie.implicitWidth/2;
+        cy =g.y+g.height/2-pie.implicitHeight/2;
+      } else {
+        cx =KWin.Workspace.cursorPos.x-pie.implicitWidth/2;
+        cy =KWin.Workspace.cursorPos.y-pie.implicitHeight/2;
+      }
+      if ( validScreen ) {
         wnd.x =Math.max(g.x, Math.min(cx, g.x+g.width-pie.implicitWidth));
         wnd.y =Math.max(g.y, Math.min(cy, g.y+g.height-pie.implicitHeight));
       } else {
