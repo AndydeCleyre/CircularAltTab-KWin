@@ -83,7 +83,6 @@ Item {
       opacity: 0.75
       anchors.top: parent.top
       anchors.topMargin: -20
-      anchors.horizontalCenter: parent.horizontalCenter
       readonly property double h: rOut-rIn+40
       readonly property double w: parent.width
       // guard against zero-division before thumbnail has a size
@@ -92,17 +91,15 @@ Item {
       width: thumb.implicitWidth*k
       height: thumb.implicitHeight*k
 
+      // Keep the thumbnail's upper-left area visible where possible.
+      anchors.horizontalCenter: undefined
+      anchors.left: parent.left
+      anchors.leftMargin: offset
+
       KWin.WindowThumbnail {
         id: thumb
         anchors.fill:parent
         wId: windowId
-        transform: [
-          Rotation {
-            angle: -piece.rotation
-            origin.x: thumb.width/2
-            origin.y: thumb.height/2
-          }
-        ]
       }
     }
   }

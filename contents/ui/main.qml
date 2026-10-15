@@ -113,8 +113,7 @@ KWin.TabBoxSwitcher {
           anchors.top: parent.top
           // below needle tip when pointing down (tip at ~inRadius*1.92)
           anchors.topMargin: pie.inRadius*1.85
-          // wider than center hole so long titles aren't clipped early
-          width: pie.inRadius*6
+          width: pie.width
           horizontalAlignment: Text.AlignHCenter
           wrapMode: Text.Wrap
           maximumLineCount: 3

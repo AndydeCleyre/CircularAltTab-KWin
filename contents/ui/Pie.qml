@@ -11,8 +11,8 @@ Rectangle {
   property var ringPieces: []
 
   // user-tunable visual preferences
-  property double selectedScale: 1.06
-  property double nonSelectedOpacity: 0.6
+  property double selectedScale: 1.25
+  property double nonSelectedOpacity: 1.0
   property double minimizedOpacity: 0.7
   property double bgAlpha: 0.72
   property double captionFontScale: 1.5
@@ -22,7 +22,7 @@ Rectangle {
   readonly property int maxPerRing: 8
 
   // base sizes (DPI-aware); the actual sizes taper as window count grows
-  readonly property double baseRingHeight: Kirigami.Units.gridUnit*12
+  readonly property double baseRingHeight: Kirigami.Units.gridUnit*72
   readonly property double baseInRadius: Kirigami.Units.gridUnit*2
   readonly property double baseRingSpacing: Kirigami.Units.gridUnit*0.5
   // 1.0 up to 4 windows, then shrinks ~3%/window, clamped to [0.55, 1.0]
@@ -45,7 +45,7 @@ Rectangle {
   signal closeRequested(int idx);
 
   // base size + padding for 1.06x scale (wider piece = chord1 + 2*offset)
-  implicitHeight: inRadius*2+(ringHeight+ringSpacing)*ringsCount*2 + 0.14*((ringHeight+ringSpacing)*ringsCount+inRadius)
+  implicitHeight: inRadius*2+(ringHeight+ringSpacing)*ringsCount*2 + 0.30*((ringHeight+ringSpacing)*ringsCount+inRadius)
   implicitWidth: implicitHeight
 
   QtObject {
@@ -144,6 +144,10 @@ Rectangle {
     acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
     hoverEnabled: true
 
+    property real lastMouseX: -1
+    property real lastMouseY: -1
+    property bool haveMousePosition: false
+
     Rectangle {
       id: bg
       anchors.fill: parent
@@ -163,9 +167,24 @@ Rectangle {
     }
 
     onPositionChanged: (mouse) => {
-      mouse.accepted =false;
-      if ( !containsMouse ) { return; }
-      pie.current =getPieIdx(mouse.x, mouse.y);
+      mouse.accepted = false;
+      if (!containsMouse) return;
+
+      // Record the initial cursor position without selecting anything.
+      if (!haveMousePosition) {
+          lastMouseX = mouse.x;
+          lastMouseY = mouse.y;
+          haveMousePosition = true;
+          return;
+      }
+
+      // Ignore events that don't represent actual cursor movement.
+      if (mouse.x === lastMouseX && mouse.y === lastMouseY)
+          return;
+
+      lastMouseX = mouse.x;
+      lastMouseY = mouse.y;
+      pie.current = getPieIdx(mouse.x, mouse.y);
     }
 
     onContainsMouseChanged: {
