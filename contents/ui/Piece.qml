@@ -18,7 +18,7 @@ Item {
   property var windowId
 
   // shrink icons on narrow slices (≥45° = full size, tapering to 0.45×)
-  readonly property double iconScale: Math.max(0.45, 1.0-(angle<45 ? (45-angle)/90 : 0))
+  readonly property double iconScale: Math.max(0.45, 2.0-(angle<45 ? (45-angle)/90 : 0))
 
   // half-angle in radians (used frequently in arc calculations)
   readonly property double angle2: angle*Math.PI/360.0
@@ -80,7 +80,7 @@ Item {
     Item {
       id: contentWrapper
       visible: !piece.minimized
-      opacity: 0.75
+      opacity: 1.0
       anchors.top: parent.top
       anchors.topMargin: -20
       readonly property double h: rOut-rIn+40
@@ -113,7 +113,7 @@ Item {
     source: icon
     visible: !piece.minimized
     anchors.fill: icon
-    color: Kirigami.Theme.highlightColor
+    color: Kirigami.Theme.hoverColor
     radius: 8
     samples: 16
     spread: 0.3
@@ -148,7 +148,7 @@ Item {
     source: fallbackIcon
     visible: piece.minimized
     anchors.fill: fallbackIcon
-    color: Kirigami.Theme.highlightColor
+    color: Kirigami.Theme.hoverColor
     radius: 8
     samples: 16
     spread: 0.3
@@ -203,7 +203,7 @@ Item {
       ctx.arc(width/2, height, rOut, Math.PI*1.5 - a1/2.0, -Math.PI/2.0 + a1/2.0, false);
       ctx.arc(width/2, height, rIn, -Math.PI/2.0 + a2/2.0, Math.PI*1.5 - a2/2.0, true);
       ctx.closePath();
-      ctx.strokeStyle = Kirigami.Theme.highlightColor;
+      ctx.strokeStyle = Kirigami.Theme.hoverColor;
       ctx.lineWidth = 3;
       ctx.stroke();
     }

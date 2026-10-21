@@ -15,11 +15,11 @@ Rectangle {
   property double nonSelectedOpacity: 1.0
   property double minimizedOpacity: 0.7
   property double bgAlpha: 0.72
-  property double captionFontScale: 1.5
+  property double captionFontScale: 3.0
   property bool centerOnScreen: true
 
   // max slices per ring before spilling to the next ring (≈ 360/maxPerRing° min arc)
-  readonly property int maxPerRing: 8
+  readonly property int maxPerRing: 12
 
   // base sizes (DPI-aware); the actual sizes taper as window count grows
   readonly property double baseRingHeight: Kirigami.Units.gridUnit*72
@@ -45,7 +45,11 @@ Rectangle {
   signal closeRequested(int idx);
 
   // base size + padding for 1.06x scale (wider piece = chord1 + 2*offset)
-  implicitHeight: inRadius*2+(ringHeight+ringSpacing)*ringsCount*2 + 0.30*((ringHeight+ringSpacing)*ringsCount+inRadius)
+
+  readonly property double outerRadius: inRadius + ringsCount * ringHeight + Math.max(0, ringsCount - 1) * ringSpacing
+  readonly property double edgePadding: Kirigami.Units.gridUnit
+
+  implicitHeight: 2 * (outerRadius * selectedScale + edgePadding)
   implicitWidth: implicitHeight
 
   QtObject {
@@ -234,8 +238,7 @@ Rectangle {
         // selected piece renders on top so accent ring isn't covered by neighbors
         z: isSelected ? 1 : 0
         opacity: (pie.current>=0 && pie.current!==index)? pie.nonSelectedOpacity : (model.minimized? pie.minimizedOpacity : 1.0)
-        // scale from center to avoid clipping outside the window
-        transformOrigin: Item.Center
+        transformOrigin: Item.Bottom
         scale: (pie.current===index)? pie.selectedScale : 1.0
         Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
         Behavior on scale { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
